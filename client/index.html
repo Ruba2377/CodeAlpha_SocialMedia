@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Social App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="navbar">
+  <h2>SocialApp</h2>
+  <div>
+    <button onclick="goProfile()">Profile</button>
+    <button onclick="logout()">Logout</button>
+  </div>
+</div>
+
+<div class="container">
+  <textarea id="postContent" placeholder="What's on your mind?"></textarea>
+  <button onclick="createPost()">Post</button>
+
+  <div id="feed"></div>
+</div>
+
+<script src="script.js"></script>
+
+<script>
+function goProfile() {
+  window.location = "profile.html";
+}
+
+function logout() {
+  localStorage.removeItem("user");
+  window.location = "login.html";
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Profile</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="navbar">
+  <h2>My Profile</h2>
+  <button onclick="logout()">Logout</button>
+</div>
+
+<div class="profile-container">
+
+  <div class="profile-card">
+    <h2 id="username"></h2>
+    <p id="email"></p>
+  </div>
+
+  <h3>My Posts</h3>
+  <div id="myposts"></div>
+
+</div>
+
+<script>
+const user = JSON.parse(localStorage.getItem("user"));
+
+if (!user) {
+  alert("Please login first");
+  window.location = "login.html";
+} else {
+  document.getElementById("username").innerText = user.username;
+  document.getElementById("email").innerText = user.email;
+
+  loadMyPosts();
+}
+
+// ✅ FIXED FUNCTION
+async function loadMyPosts() {
+  try {
+    const res = await fetch("http://localhost:5000/api/posts");
+    const posts = await res.json();
+
+    const container = document.getElementById("myposts");
+    container.innerHTML = "";
+
+    // Filter only current user's posts
+    const myPosts = posts.filter(post => post.userId === user._id);
+
+    // Show latest first
+    myPosts.reverse().forEach(post => {
+      const div = document.createElement("div");
+      div.className = "post";
+
+      div.innerHTML = `
+        <p>${post.content}</p>
+      `;
+
+      container.appendChild(div);
+    });
+
+  } catch (err) {
+    console.error("Error loading posts:", err);
+  }
+}
+
+// Logout
+function logout() {
+  localStorage.clear();
+  window.location = "login.html";
+}
+</script>
+</body>
+</html>
